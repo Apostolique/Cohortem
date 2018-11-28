@@ -1,0 +1,2 @@
+# Cohortem
+Music composition algorithm.
