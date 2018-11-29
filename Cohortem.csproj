@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="NAudio" Version="1.8.5" />
+    <PackageReference Include="ReadLine" Version="2.0.1" />
   </ItemGroup>
 
 </Project>

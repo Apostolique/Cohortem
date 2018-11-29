@@ -11,6 +11,7 @@ namespace Cohortem {
             int index = -1;
 
             Console.WriteLine("Available devices:");
+            ReadLine.HistoryEnabled = true;
 
             for (int device = 0; device < MidiOut.NumberOfDevices; device++) {
                 string name = MidiOut.DeviceInfo(device).ProductName;
@@ -19,7 +20,7 @@ namespace Cohortem {
             Console.WriteLine("\nWhich device do you want?");
 
             while (index < 0 || index >= MidiOut.NumberOfDevices) {
-                Int32.TryParse(Console.ReadLine(), out index);
+                Int32.TryParse(ReadLine.Read("?> "), out index);
             }
 
             if (index >= 0 && index < MidiOut.NumberOfDevices) {
