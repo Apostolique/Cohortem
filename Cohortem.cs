@@ -39,13 +39,17 @@ namespace Cohortem {
             NoteOnEvent noteOnEvent2 = new NoteOnEvent(0, 1, 62, 70, 0);
 
             //TODO: If the MidiOut device went offline, this will cause errors.
-            _midiOut.Send(noteOnEvent1.GetAsShortMessage());
+            PlayNote(noteOnEvent1);
             Task.Delay(2000).Wait();
-            _midiOut.Send(noteOnEvent1.OffEvent.GetAsShortMessage());
+            PlayNote(noteOnEvent1.OffEvent);
             Task.Delay(200).Wait();
-            _midiOut.Send(noteOnEvent2.GetAsShortMessage());
+            PlayNote(noteOnEvent2);
             Task.Delay(2000).Wait();
-            _midiOut.Send(noteOnEvent2.OffEvent.GetAsShortMessage());
+            PlayNote(noteOnEvent2.OffEvent);
+        }
+
+        public void PlayNote(NoteEvent note) {
+            _midiOut.Send(note.GetAsShortMessage());
         }
 
         public void Dispose() {
