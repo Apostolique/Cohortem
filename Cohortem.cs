@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NAudio.Midi;
 
@@ -35,17 +36,18 @@ namespace Cohortem {
 
         public void Run() {
             //For now, we just want to make sure we can send Midi events.
-            NoteOnEvent noteOnEvent1 = new NoteOnEvent(0, 1, 60, 70, 0);
-            NoteOnEvent noteOnEvent2 = new NoteOnEvent(0, 1, 62, 70, 0);
+            List<NoteOnEvent> notes = new List<NoteOnEvent>();
 
-            //TODO: If the MidiOut device went offline, this will cause errors.
-            PlayNote(noteOnEvent1);
-            Task.Delay(2000).Wait();
-            PlayNote(noteOnEvent1.OffEvent);
-            Task.Delay(200).Wait();
-            PlayNote(noteOnEvent2);
-            Task.Delay(2000).Wait();
-            PlayNote(noteOnEvent2.OffEvent);
+            for (int i = 60; i <= 72; i++) {
+                notes.Add(new NoteOnEvent(0, 1, i, 70, 0));
+            }
+
+            foreach (NoteOnEvent note in notes) {
+                PlayNote(note);
+                Task.Delay(2000).Wait();
+                PlayNote(note.OffEvent);
+                Task.Delay(200).Wait();
+            }
         }
 
         public void PlayNote(NoteEvent note) {
