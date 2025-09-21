@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Commons.Music.Midi;
-using System.Linq;
+using CrypticWizard.RandomWordGenerator;
+using static CrypticWizard.RandomWordGenerator.WordGenerator;
 
 namespace Cohortem {
     /// <summary>
@@ -10,6 +12,8 @@ namespace Cohortem {
     /// </summary>
     public class Cohortem : IDisposable {
         public Cohortem() {
+            WordGenerator w = new();
+
             int index = -1;
 
             Console.WriteLine("Available devices:");
@@ -17,7 +21,7 @@ namespace Cohortem {
 
             var access = MidiAccessManager.Default;
 
-            var devices = access.Outputs.ToList();
+            List<IMidiPortDetails> devices = [.. access.Outputs];
 
             for (int i = 0; i < devices.Count; i++) {
                 string name = devices[i].Name;
@@ -29,7 +33,7 @@ namespace Cohortem {
             } else {
                 Console.WriteLine("\nWhich device do you want?");
                 while (index < 0 || index >= devices.Count) {
-                    int.TryParse(ReadLine.Read("?> "), out index);
+                    _ = int.TryParse(ReadLine.Read("?> "), out index);
                 }
             }
 
@@ -42,7 +46,7 @@ namespace Cohortem {
             }
         }
 
-        private IMidiOutput _midiOut;
+        private readonly IMidiOutput _midiOut;
 
         public void Run() {
             //For now, we just want to make sure we can send Midi events.
@@ -52,10 +56,10 @@ namespace Cohortem {
                 notes.Add((i, 0x70));
             }
 
-            foreach (var note in notes) {
-                PlayNote(MidiEvent.NoteOn, note.Pitch, note.Velocity);
+            foreach ((byte Pitch, byte Velocity) in notes) {
+                PlayNote(MidiEvent.NoteOn, Pitch, Velocity);
                 Task.Delay(2000).Wait();
-                PlayNote(MidiEvent.NoteOff, note.Pitch, note.Velocity);
+                PlayNote(MidiEvent.NoteOff, Pitch, Velocity);
                 Task.Delay(200).Wait();
             }
         }
@@ -64,8 +68,13 @@ namespace Cohortem {
             _midiOut.Send([eventType, value, velocity], 0, 3, 0);
         }
 
+        public static string GenerateName(WordGenerator w) {
+            string name = w.GetPattern([PartOfSpeech.adj, PartOfSpeech.adj, PartOfSpeech.noun], ' ');
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
+        }
+
         public void Dispose() {
-            _midiOut.CloseAsync();
+            _ = _midiOut.CloseAsync();
         }
     }
 }

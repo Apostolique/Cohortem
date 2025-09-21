@@ -6,8 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CrypticWizard.RandomWordGenerator" Version="0.9.5" />
     <PackageReference Include="managed-midi" Version="1.10.1" />
     <PackageReference Include="ReadLine" Version="2.0.1" />
+    <PackageReference Include="Scriban" Version="6.3.0" />
   </ItemGroup>
 
 </Project>
