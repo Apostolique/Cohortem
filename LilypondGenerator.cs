@@ -7,13 +7,13 @@ using Scriban;
 using static CrypticWizard.RandomWordGenerator.WordGenerator;
 
 namespace Cohortem {
-    public class LilypondGenerator {
-        public LilypondGenerator() {
+    public class LilyPondGenerator {
+        public LilyPondGenerator() {
             WordGenerator w = new();
 
             _title = GenerateTitle(w);
         }
-        public void SaveOutput(string right, string left) {
+        public void SaveOutput(string left, string right) {
             string LilyPondTemplate = Template.Parse(File.ReadAllText("./LilypondTemplate/Template.ly")).Render(new { Title = _title, Author = "Cohortem", Year = DateTime.Now.Year, Right = right, Left = left });
 
             Directory.CreateDirectory("./Output/");
