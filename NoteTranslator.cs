@@ -14,29 +14,29 @@ namespace Cohortem {
             "c", "des", "d", "ees", "e", "f", "ges", "g", "aes", "a", "bes", "b"
         };
 
-        public static string GetSharpNoteName(int note) {
+        public static string GetSharpNoteName((int Pitch, int Duration) note) {
             return GetNoteName(note, SharpNames);
         }
-        public static string GetFlatNoteName(int note) {
+        public static string GetFlatNoteName((int Pitch, int Duration) note) {
             return GetNoteName(note, FlatNames);
         }
 
-        private static string GetNoteName(int note, string[] nameSet) {
-            int absoluteNote = note - MiddleC + OctaveRange;
+        private static string GetNoteName((int Pitch, int Duration) note, string[] nameSet) {
+            int absoluteNote = note.Pitch - MiddleC + OctaveRange;
             int relativeNote = Math.Abs((int)Math.Floor(absoluteNote / (double)OctaveRange));
-            string name = nameSet[note % OctaveRange];
+            string name = nameSet[note.Pitch % OctaveRange];
 
-            if (note < MiddleC - OctaveRange) {
+            if (note.Pitch < MiddleC - OctaveRange) {
                 for (int i = 0; i < relativeNote; i++) {
                     name += ',';
                 }
-            } else if (note >= MiddleC) {
+            } else if (note.Pitch >= MiddleC) {
                 for (int i = 0; i < relativeNote; i++) {
                     name += '\'';
                 }
             }
 
-            return name;
+            return $"{name}{note.Duration}";
         }
     }
 }
