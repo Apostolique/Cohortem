@@ -6,7 +6,6 @@ namespace Cohortem {
     /// </summary>
     public static class NoteTranslator {
         private static int MiddleC = 60;
-        private static int HigherC = 72;
         private static int OctaveRange = 12;
         private static string[] SharpNames = {
             "c", "cis", "d", "dis", "e", "f", "fis", "g", "gis", "a", "ais", "b"
@@ -23,15 +22,15 @@ namespace Cohortem {
         }
 
         private static string GetNoteName(int note, string[] nameSet) {
-            int absoluteNote = note - MiddleC;
-            int relativeNote = Math.Abs(absoluteNote) / OctaveRange;
+            int absoluteNote = note - MiddleC + OctaveRange;
+            int relativeNote = Math.Abs((int)Math.Floor(absoluteNote / (double)OctaveRange));
             string name = nameSet[note % OctaveRange];
 
-            if (note < MiddleC) {
-                for (int i = 0; i < relativeNote + 1; i++) {
+            if (note < MiddleC - OctaveRange) {
+                for (int i = 0; i < relativeNote; i++) {
                     name += ',';
                 }
-            } else if (note >= HigherC) {
+            } else if (note >= MiddleC) {
                 for (int i = 0; i < relativeNote; i++) {
                     name += '\'';
                 }

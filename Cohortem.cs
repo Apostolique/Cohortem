@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Commons.Music.Midi;
-using CrypticWizard.RandomWordGenerator;
-using static CrypticWizard.RandomWordGenerator.WordGenerator;
 
 namespace Cohortem {
     /// <summary>
@@ -12,7 +10,7 @@ namespace Cohortem {
     /// </summary>
     public class Cohortem : IDisposable {
         public Cohortem() {
-            WordGenerator w = new();
+            _lg = new LilypondGenerator();
 
             int index = -1;
 
@@ -25,7 +23,7 @@ namespace Cohortem {
 
             for (int i = 0; i < devices.Count; i++) {
                 string name = devices[i].Name;
-                Console.WriteLine("\t{" + i + "} " + name);
+                Console.WriteLine($"\t{{{i}}} {name}");
             }
 
             if (devices.Count == 1) {
@@ -46,15 +44,18 @@ namespace Cohortem {
             }
         }
 
-        private readonly IMidiOutput _midiOut;
-
         public void Run() {
             //For now, we just want to make sure we can send Midi events.
             List<(byte Pitch, byte Velocity)> notes = [];
 
-            for (byte i = 60; i <= 72; i++) {
+            for (byte i = 36; i <= 84; i++) {
                 notes.Add((i, 0x70));
             }
+
+            string right = string.Join(' ', notes.Select(n => NoteTranslator.GetSharpNoteName(n.Pitch)).ToArray());
+            string left = "";
+
+            _lg.SaveOutput(right, left);
 
             foreach ((byte Pitch, byte Velocity) in notes) {
                 PlayNote(MidiEvent.NoteOn, Pitch, Velocity);
@@ -68,13 +69,11 @@ namespace Cohortem {
             _midiOut.Send([eventType, value, velocity], 0, 3, 0);
         }
 
-        public static string GenerateName(WordGenerator w) {
-            string name = w.GetPattern([PartOfSpeech.adj, PartOfSpeech.adj, PartOfSpeech.noun], ' ');
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
-        }
-
         public void Dispose() {
             _ = _midiOut.CloseAsync();
         }
+
+        private readonly IMidiOutput _midiOut;
+        private LilypondGenerator _lg;
     }
 }

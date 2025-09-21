@@ -1,9 +1,9 @@
 \version "2.24.4"
 \include "definitions.ly"
 
-title = "Template"
-author = "{{name}}"
-year = "2025"
+title = "{{title}}"
+author = "{{author}}"
+year = "{{year}}"
 
 % Remove this when you have enough systems.
 \paper {
@@ -21,16 +21,16 @@ global = {
   \tempo "Allegretto" 4 = 100
 }
 
-right = \relative c' {
+right = {
   \clef "treble"
 
-  c4 d e f
+  {{right}}
 }
 
-left = \relative c, {
+left = {
   \clef "bass"
 
-  c'4 d e f
+  {{left}}
 }
 
 dynamics = {

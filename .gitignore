@@ -61,3 +61,7 @@ monodroid*.msi
 *.dll
 *.VC.db
 *.VC.opendb
+
+*.mid
+*.pdf
+Output/
