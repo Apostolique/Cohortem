@@ -14,7 +14,7 @@ namespace Cohortem {
             _title = GenerateTitle(w);
         }
         public void SaveOutput(string left, string right) {
-            string LilyPondTemplate = Template.Parse(File.ReadAllText("./LilypondTemplate/Template.ly")).Render(new { Title = _title, Author = "Cohortem", Year = DateTime.Now.Year, Right = right, Left = left });
+            string LilyPondTemplate = Template.Parse(File.ReadAllText("./LilypondTemplate/Template.ly")).Render(new { Title = _title, Author = "Cohortem", Year = DateTime.Now.Year, A = right, B = left });
 
             Directory.CreateDirectory("./Output/");
             File.WriteAllText("./Output/Test.ly", LilyPondTemplate);

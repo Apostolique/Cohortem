@@ -24,13 +24,13 @@ global = {
 right = {
   \clef "treble"
 
-  {{right}}
+  {{a}}
 }
 
 left = {
   \clef "bass"
 
-  {{left}}
+  {{b}}
 }
 
 dynamics = {
